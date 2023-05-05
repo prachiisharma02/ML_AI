@@ -6,6 +6,7 @@ sd = cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_smile.xml')
 
 vid = cv2.VideoCapture(0)
 notCaptured =  True
+seq = 0
 while notCaptured:
 
     flag, img =vid.read()
@@ -22,8 +23,15 @@ while notCaptured:
         
             face = img[y:y+h,x:x+w, :].copy()
             smiles =  sd.detectMultiScale(face, scaleFactor =1.1,minNeighbors = 5, minSize = (50,50))
+
             if len(smiles) == 1:
-                cv2.imwrite('myself.png',img)  
+                seq += 1
+                if seq == 1:
+                   cv2.imwrite('myself.png',img)  
+                   notCaptured = False
+                   break
+                else:
+                    seq=0
             
             cv2.rectangle(img, pt1 = (x,y), pt2 = (x+w,y+h),color = colors[i],thickness =  2)    
             i+=1   
